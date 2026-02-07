@@ -17,6 +17,8 @@ const Login = (props) => {
           body:JSON.stringify({name:decoded.name,email:decoded.email,googleid:decoded.sub}),
           credentials:'include'
         })
+        const result=await response.json();
+        console.log(result);
         if(response.ok){
           setuserloggedin(true);
           navigate('/');

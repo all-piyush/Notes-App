@@ -3,7 +3,6 @@ const jwt=require('jsonwebtoken');
 const bcrypt=require('bcrypt');
 exports.Login=async(req,res)=>{
     try{
-        console.log("yes");
         const {email,password}=req.body;
         if(!email || !password){
             return res.status(400).json({
@@ -25,11 +24,16 @@ exports.Login=async(req,res)=>{
                 success:false,
             })
         }
-        const options={httpOnly:true,sameSite:'none',secure:true,maxAge:7*24*60*60*1000};
+        const options={httpOnly:true,sameSite:'None',secure:true,maxAge:7*24*60*60*1000};
         const secret=process.env.JWT_SECRET;
         const payload={email:email,id:user._id};
         const token=jwt.sign(payload,secret,{expiresIn:'7d'});
-        console.log(token);
+        if(!token ){
+            return res.status(400).json({
+                message:"Token not present",
+                success:false,
+            })
+        }
         res.cookie('token',token,options);
         return res.status(200).json({
             message:"user logged in successfully",
